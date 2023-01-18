@@ -10,7 +10,7 @@ while run:
     screen.blit(bg, (0, 0))
     world.draw()
     lava_group.draw(screen)
-    if not game_over == 0:
+    if game_over == 0:
         enemy_group.update()
     enemy_group.draw(screen)
     game_over = player.update(game_over)
