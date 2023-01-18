@@ -1,1 +1,0 @@
-print("wow is gay")
