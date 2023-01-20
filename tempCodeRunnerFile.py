@@ -1,1 +1,1 @@
-    world.draw()
+#world.draw()#

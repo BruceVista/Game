@@ -75,6 +75,7 @@ class Player():
                     if self.vel_y < 0:
                         dy = tile[1].bottom - self.rect.top
 
+
                         #check if above the ground
                     elif self.vel_y >= 0:
                         dy = tile[1].top - self.rect.bottom
@@ -109,6 +110,7 @@ class World():
         dirt_img = pygame.image.load('images/dirt.png')
         grass_img = pygame.image.load('images/gras.png')
         edge_img = pygame.image.load('images/edge.png')
+        blackje_img = pygame.image.load('images/blackje.png')
         row_count = 0
         for row in data: 
             col_count = 0
@@ -140,6 +142,14 @@ class World():
                 if tile == 4:
                     enemy = Enemy(col_count * tile_size, row_count *tile_size + 3)
                     enemy_group.add(enemy)
+
+                if tile == 6:
+                    img = pygame.transform.scale(blackje_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
 
                 if tile == 5:
                     lava = Lava(col_count * tile_size, row_count * tile_size)
@@ -187,13 +197,13 @@ world_data = [
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-[3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+[3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 6, 0, 3],
 [3, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 2, 2, 2, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-[3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+[3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],

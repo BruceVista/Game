@@ -15,7 +15,7 @@ while run:
     enemy_group.draw(screen)
     game_over = player.update(game_over)
     
-        
+    
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
