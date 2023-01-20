@@ -86,7 +86,8 @@ class Player():
             #check for collision with lava
             if pygame.sprite.spritecollide(self, lava_group, False):
                 game_over -= 1
-
+            if self.rect.colliderect(self.blackje_img_rect):
+                game_over -= 1
 
             #update player position
             self.rect.x += dx
@@ -143,17 +144,19 @@ class World():
                     enemy = Enemy(col_count * tile_size, row_count *tile_size + 3)
                     enemy_group.add(enemy)
 
-                if tile == 6:
-                    img = pygame.transform.scale(blackje_img, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count * tile_size
-                    img_rect.y = row_count * tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
-
+                
                 if tile == 5:
                     lava = Lava(col_count * tile_size, row_count * tile_size)
                     lava_group.add(lava)
+                
+                if tile == 6:
+                    img = pygame.transform.scale(blackje_img, (tile_size, tile_size))
+                    self.blackje_img_rect = blackje_img.get_rect()
+                    self.blackje_img_rect.x = col_count * tile_size
+                    self.blackje_img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+
                 col_count += 1
             row_count += 1
 
