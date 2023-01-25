@@ -16,6 +16,26 @@ pygame.display.set_caption('Super Pablo')
 
 tile_size = 50
 game_over = 0
+z 
+#colors 
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+HOVER_COLOR = (50, 70, 90)
+# font
+FONT = pygame.font.SysFont ("Times New Norman", 60)
+
+
+# text
+text1 = FONT.render("START", True, WHITE)
+
+#rect
+rect1 = pygame.Rect(300,300,205,80)
+
+#buttons text rect and color.
+buttons = [
+    [text1, rect1, BLACK],
+    ]
+
 
 class Player():
     def __init__(self, x, y):
@@ -240,24 +260,65 @@ world = World(world_data)
 
 
 bg = pygame.image.load('images/bg.png')
-
-
 run = True
+menu = True
+game = False
+mousedown = False
 while run:
-    clock.tick(fps)
-    screen.blit(bg, (0, 0))
-    world.draw()
-    lava_group.draw(screen)
-    if game_over == 0:
-        enemy_group.update()
-    enemy_group.draw(screen)
-    win_group.draw(screen)
-    game_over = player.update(game_over)
-    
-    
+    while menu:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                menu = False
+                run = False
+            
+            if event.type == pygame.MOUSEMOTION:
+                for button in buttons:
+                    if button[1].collidepoint(event.pos):
+                       button[2] = HOVER_COLOR
+                       if mousedown == True:
+                            menu = False
+                            game = True
+                    else:
+                        button[2] = BLACK
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mousedown = True
+                print("asdasd")
+            else: 
+                mousedown = False
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+        screen.fill((20, 50, 70))
+
+        
+        for text, rect, color in buttons:
+            pygame.draw.rect(screen, color, rect)
+            screen.blit(text, rect)
+        pygame.display.update()
+        pygame.display.flip()
+        clock.tick(60)
+
+
+
+    while game:
+        clock.tick(fps)
+        screen.blit(bg, (0, 0))
+        world.draw()
+        lava_group.draw(screen)
+        if game_over == 0:
+            enemy_group.update()
+        enemy_group.draw(screen)
+        win_group.draw(screen)
+        game_over = player.update(game_over)
+        
+        
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                game = False
+        pygame.display.update()
+        pygame.display.flip()
+        clock.tick(60)
     pygame.display.update()
+    pygame.display.flip()
+    clock.tick(60)
 pygame.quit
