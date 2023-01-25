@@ -16,7 +16,8 @@ pygame.display.set_caption('Super Pablo')
 
 tile_size = 50
 game_over = 0
-z 
+
+
 #colors 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -120,7 +121,7 @@ class Player():
      elif game_over < 0:
         self.image = self.dead_img
      elif game_over > 0:
-        screen.blit(self.win_img, (100, -100))
+        screen.blit(self.win_img, (-75, -100))
         #draw player onto screen
      screen.blit(self.image, self.rect)
      
@@ -136,6 +137,7 @@ class World():
         grass_img = pygame.image.load('images/gras.png')
         edge_img = pygame.image.load('images/edge.png')
         blackje_img = pygame.image.load('images/blackje.png')
+        
         row_count = 0
         for row in data: 
             col_count = 0
@@ -176,6 +178,7 @@ class World():
                 if tile == 6:
                     win = Win(col_count * tile_size, row_count * tile_size)
                     win_group.add(win)
+
                     
                 col_count += 1
             row_count += 1
@@ -242,7 +245,7 @@ world_data = [
 [3, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
-[2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 2, 2, 2, 1, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2, 2, 2, 2],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
@@ -260,65 +263,24 @@ world = World(world_data)
 
 
 bg = pygame.image.load('images/bg.png')
+
+
 run = True
-menu = True
-game = False
-mousedown = False
 while run:
-    while menu:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                menu = False
-                run = False
-            
-            if event.type == pygame.MOUSEMOTION:
-                for button in buttons:
-                    if button[1].collidepoint(event.pos):
-                       button[2] = HOVER_COLOR
-                       if mousedown == True:
-                            menu = False
-                            game = True
-                    else:
-                        button[2] = BLACK
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mousedown = True
-                print("asdasd")
-            else: 
-                mousedown = False
+    clock.tick(fps)
+    screen.blit(bg, (0, 0))
+    world.draw()
+    lava_group.draw(screen)
+    if game_over == 0:
+        enemy_group.update()
+    enemy_group.draw(screen)
+    win_group.draw(screen)
+    game_over = player.update(game_over)
+    
+    
 
-        screen.fill((20, 50, 70))
-
-        
-        for text, rect, color in buttons:
-            pygame.draw.rect(screen, color, rect)
-            screen.blit(text, rect)
-        pygame.display.update()
-        pygame.display.flip()
-        clock.tick(60)
-
-
-
-    while game:
-        clock.tick(fps)
-        screen.blit(bg, (0, 0))
-        world.draw()
-        lava_group.draw(screen)
-        if game_over == 0:
-            enemy_group.update()
-        enemy_group.draw(screen)
-        win_group.draw(screen)
-        game_over = player.update(game_over)
-        
-        
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                game = False
-        pygame.display.update()
-        pygame.display.flip()
-        clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
     pygame.display.update()
-    pygame.display.flip()
-    clock.tick(60)
 pygame.quit
