@@ -4,12 +4,13 @@ from pygame.locals import *
 pygame.init()
 
 clock = pygame.time.Clock()
-fps = 60
+fps = 500
 
 screen_width = 1000
 screen_height = 1000
 
 
+<<<<<<< Updated upstream
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Super Pablo')
@@ -26,17 +27,38 @@ HOVER_COLOR = (50, 70, 90)
 FONT = pygame.font.SysFont ("Times New Norman", 60)
 
 
+=======
+                                                                  
+screen = pygame.display.set_mode((screen_width, screen_height))                                                                  
+pygame.display.set_caption('Super Pablo')                                                                  
+                                                                  
+tile_size = 50                                                                  
+game_over = 0                                                                  
+LMC = 1                                                                  
+#colors                                                                   
+BLACK = (0, 0, 0)                                                                  
+WHITE = (255, 255, 255)                                                                  
+HOVER_COLOR = (50, 70, 90)                                                                  
+# font                                                                  
+FONT = pygame.font.SysFont ("Times New Norman", 60)                                                                  
+                                                                  
+                                                                  
+>>>>>>> Stashed changes
 # text
 text1 = FONT.render("START", True, WHITE)
-
+text2 = FONT.render("MENU", True, WHITE)
+text3 = FONT.render("RESTART", True, WHITE)
 #rect
-rect1 = pygame.Rect(300,300,205,80)
-
+rect1 = pygame.Rect(400,300,205,80)
+rect2 = pygame.Rect(400,300,205,80)
+rect3 = pygame.Rect(300,300,205,80)
 #buttons text rect and color.
-buttons = [
-    [text1, rect1, BLACK],
-    ]
-
+button1 = [
+    [text1, rect1, BLACK]]
+button2 = [
+    [text2, rect2, BLACK]]
+button3 = [
+    [text3, rect3, BLACK]]
 
 class Player():
     def __init__(self, x, y):
@@ -50,6 +72,8 @@ class Player():
         self.img_left = pygame.transform.scale(img_left, (70, 100))
         win_img = pygame.image.load('images/win.png')
         self.win_img = pygame.transform.scale(win_img,(1150, 1300))
+        lose_img = pygame.image.load('images/lose.png')
+        self.lose_img = pygame.transform.scale(lose_img,(1150, 1300))
          
         self.image = pygame.transform.scale(img,(70, 100)) 
         self.rect = self.image.get_rect()
@@ -118,10 +142,16 @@ class Player():
             self.rect.y += dy
         
 
+<<<<<<< Updated upstream
      elif game_over < 0:
         self.image = self.dead_img
      elif game_over > 0:
         screen.blit(self.win_img, (-75, -100))
+=======
+     
+
+
+>>>>>>> Stashed changes
         #draw player onto screen
      screen.blit(self.image, self.rect)
      
@@ -244,8 +274,13 @@ world_data = [
 [3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3],
 [3, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+<<<<<<< Updated upstream
 [3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
 [2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2, 2, 2, 2],
+=======
+[3, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
+[2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 2, 2, 2, 1, 2, 2, 2],
+>>>>>>> Stashed changes
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
@@ -266,6 +301,7 @@ bg = pygame.image.load('images/bg.png')
 
 
 run = True
+<<<<<<< Updated upstream
 while run:
     clock.tick(fps)
     screen.blit(bg, (0, 0))
@@ -283,4 +319,126 @@ while run:
         if event.type == pygame.QUIT:
             run = False
     pygame.display.update()
+=======
+menu = True
+game = False
+win = False
+lose = False
+mousedown = False
+while run:
+    while menu:
+        screen.fill((20, 50, 70))
+        for text, rect, color in button1:
+            pygame.draw.rect(screen, color, rect)
+            screen.blit(text, rect)
+        player = Player(100,screen_height-245)
+        game_over = 0
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                menu = False
+                run = False
+            
+            if event.type == pygame.MOUSEMOTION:
+                for button in button1:
+
+                    if button[1].collidepoint(event.pos):
+                       button[2] = HOVER_COLOR
+                    else:
+                        button[2] = BLACK
+            if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
+                mousedown = True
+                if mousedown == True:
+                    menu = False
+                    game = True
+            else:
+                mousedown = False
+        pygame.display.update()
+        clock.tick(fps)
+        
+
+
+    while game:
+        clock.tick(fps)
+        screen.blit(bg, (0, 0))
+        world.draw()
+        lava_group.draw(screen)
+        if game_over == 0:
+            enemy_group.update()
+        enemy_group.draw(screen)
+        win_group.draw(screen)
+        game_over = player.update(game_over)
+        if game_over < 0:
+            player.image = player.dead_img
+            game = False
+            lose = True
+        elif game_over > 0:
+            game = False
+            win = True
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                game = False
+        pygame.display.update()
+        clock.tick(fps)
+
+    
+    while win:
+        screen.fill((20, 50, 70))
+        for text, rect, color in button2:
+            pygame.draw.rect(screen, color, rect)
+            screen.blit(text, rect)
+            screen.blit(player.win_img, (-75 , -100))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                win = False
+                run = False
+            if event.type == pygame.MOUSEMOTION:
+                for button in button2:
+                    if button[1].collidepoint(event.pos):
+                       button[2] = HOVER_COLOR
+                    else:
+                        button[2] = BLACK
+            if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
+                mousedown = True
+                if mousedown == True:
+                    win = False
+                    menu = True
+            else:
+                mousedown = False
+        pygame.display.update()
+        clock.tick(fps)
+
+
+    while lose:
+        screen.fill((20, 50, 70))
+        for text, rect, color in button3:
+            pygame.draw.rect(screen, color, rect)
+            screen.blit(text, rect)
+            screen.blit(player.lose_img, (-75 , -100))
+        player = Player(100,screen_height-245)
+        game_over = 0
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                lose = False
+                run = False
+            if event.type == pygame.MOUSEMOTION:
+                for button in button3:
+                    if button[1].collidepoint(event.pos):
+                       button[2] = HOVER_COLOR
+                    else:
+                        button[2] = BLACK
+            if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
+                mousedown = True
+                if mousedown == True:
+                    lose = False
+                    game = True
+            else:
+                mousedown = False
+        pygame.display.update()
+        clock.tick(fps)
+    
+    pygame.display.update()
+    clock.tick(fps)   
+
+>>>>>>> Stashed changes
 pygame.quit
