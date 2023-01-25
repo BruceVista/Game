@@ -12,7 +12,7 @@ screen_height = 1000
 
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('Platformer')
+pygame.display.set_caption('Super Pablo')
 
 tile_size = 50
 game_over = 0
@@ -27,9 +27,10 @@ class Player():
         self.img_right  =  pygame.transform.scale(img_right, (70, 100))
         img_left = pygame.image.load('images/backwords.png')
         self.img_left = pygame.transform.scale(img_left, (70, 100))
-        win_img = pygame.image.load('images/jump.png')
-        self.win_img = pygame.transform.scale(win_img,(100, 70))
-        self.image = pygame.transform.scale(img,(70, 100))
+        win_img = pygame.image.load('images/win.png')
+        self.win_img = pygame.transform.scale(win_img,(1150, 1300))
+         
+        self.image = pygame.transform.scale(img,(70, 100)) 
         self.rect = self.image.get_rect()
         self.rect.x = x 
         self.rect.y = y
@@ -99,7 +100,7 @@ class Player():
      elif game_over < 0:
         self.image = self.dead_img
      elif game_over > 0:
-        self.image = self.win_img 
+        screen.blit(self.win_img, (100, -100))
         #draw player onto screen
      screen.blit(self.image, self.rect)
      
@@ -217,11 +218,11 @@ world_data = [
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 3],
-[3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+[3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3],
 [3, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-[3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-[2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2, 2, 2, 2],
+[3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
+[2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 2, 2, 2, 1, 2, 2, 2],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
@@ -237,7 +238,7 @@ world = World(world_data)
 
 
 
-#load images
+
 bg = pygame.image.load('images/bg.png')
 
 
