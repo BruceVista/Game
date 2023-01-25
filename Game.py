@@ -4,30 +4,12 @@ from pygame.locals import *
 pygame.init()
 
 clock = pygame.time.Clock()
-fps = 500
+fps = 100
 
 screen_width = 1000
 screen_height = 1000
 
 
-<<<<<<< Updated upstream
-
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('Super Pablo')
-
-tile_size = 50
-game_over = 0
-
-
-#colors 
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-HOVER_COLOR = (50, 70, 90)
-# font
-FONT = pygame.font.SysFont ("Times New Norman", 60)
-
-
-=======
                                                                   
 screen = pygame.display.set_mode((screen_width, screen_height))                                                                  
 pygame.display.set_caption('Super Pablo')                                                                  
@@ -43,7 +25,6 @@ HOVER_COLOR = (50, 70, 90)
 FONT = pygame.font.SysFont ("Times New Norman", 60)                                                                  
                                                                   
                                                                   
->>>>>>> Stashed changes
 # text
 text1 = FONT.render("START", True, WHITE)
 text2 = FONT.render("MENU", True, WHITE)
@@ -142,16 +123,9 @@ class Player():
             self.rect.y += dy
         
 
-<<<<<<< Updated upstream
-     elif game_over < 0:
-        self.image = self.dead_img
-     elif game_over > 0:
-        screen.blit(self.win_img, (-75, -100))
-=======
      
 
 
->>>>>>> Stashed changes
         #draw player onto screen
      screen.blit(self.image, self.rect)
      
@@ -274,13 +248,8 @@ world_data = [
 [3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3],
 [3, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-<<<<<<< Updated upstream
-[3, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
-[2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2, 2, 2, 2],
-=======
-[3, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
+[3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
 [2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 2, 2, 2, 1, 2, 2, 2],
->>>>>>> Stashed changes
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
@@ -298,33 +267,13 @@ world = World(world_data)
 
 
 bg = pygame.image.load('images/bg.png')
-
-
 run = True
-<<<<<<< Updated upstream
-while run:
-    clock.tick(fps)
-    screen.blit(bg, (0, 0))
-    world.draw()
-    lava_group.draw(screen)
-    if game_over == 0:
-        enemy_group.update()
-    enemy_group.draw(screen)
-    win_group.draw(screen)
-    game_over = player.update(game_over)
-    
-    
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-    pygame.display.update()
-=======
 menu = True
 game = False
 win = False
 lose = False
 mousedown = False
+
 while run:
     while menu:
         screen.fill((20, 50, 70))
@@ -342,16 +291,12 @@ while run:
                 for button in button1:
 
                     if button[1].collidepoint(event.pos):
-                       button[2] = HOVER_COLOR
+                       button[2] = HOVER_COLOR 
                     else:
                         button[2] = BLACK
             if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
-                mousedown = True
-                if mousedown == True:
                     menu = False
                     game = True
-            else:
-                mousedown = False
         pygame.display.update()
         clock.tick(fps)
         
@@ -399,12 +344,9 @@ while run:
                     else:
                         button[2] = BLACK
             if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
-                mousedown = True
-                if mousedown == True:
                     win = False
                     menu = True
-            else:
-                mousedown = False
+
         pygame.display.update()
         clock.tick(fps)
 
@@ -428,17 +370,12 @@ while run:
                     else:
                         button[2] = BLACK
             if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
-                mousedown = True
-                if mousedown == True:
                     lose = False
                     game = True
-            else:
-                mousedown = False
         pygame.display.update()
         clock.tick(fps)
     
     pygame.display.update()
     clock.tick(fps)   
 
->>>>>>> Stashed changes
 pygame.quit
