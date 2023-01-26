@@ -275,7 +275,7 @@ world = World(world_data)
 
 
 
-bg = pygame.image.load('images/level2.png')
+bg = pygame.image.load('images/level2bg.png')
 run = True
 menu = True
 game = False
