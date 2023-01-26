@@ -1,5 +1,6 @@
 import sys, pygame
 from pygame.locals import *
+import time
 
 pygame.init()
 
@@ -15,7 +16,8 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Super Pablo')                                                                  
                                                                   
 tile_size = 50                                                                  
-game_over = 0                                                                  
+game_over = 0  
+coins = 0                                       
 LMC = 1                                                                  
 #colors                                                                   
 BLACK = (0, 0, 0)                                                                  
@@ -23,23 +25,57 @@ WHITE = (255, 255, 255)
 HOVER_COLOR = (50, 70, 90)                                                                  
 # font                                                                  
 FONT = pygame.font.SysFont ("Times New Norman", 60)                                                                  
-                                                                  
-                                                                  
+
+
+
+level1 = pygame.image.load('images/level1.png')
+
+level2 = pygame.image.load('images/level2.png')
+
+level3 = pygame.image.load('images/level3.png')
+
+class Button(): 
+    def __init__(self, x, y, image, scale):
+        width = image.get_width()
+        height = image.get_height()
+        self.image = pygame.transform.scale(image, (int(width* scale), int(height * scale)))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.clicked = False
+    def draw(self):
+        action = False
+        #get mouse position
+        pos = pygame.mouse.get_pos()
+        #mouse over and clicked conditions
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                self.clicked = True
+                action = True
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+
+        screen.blit(self.image, (self.rect.x, self.rect.y))                                                               
+        return action                                                          
 # text
-text1 = FONT.render("START", True, WHITE)
+
 text2 = FONT.render("MENU", True, WHITE)
 text3 = FONT.render("RESTART", True, WHITE)
+
 #rect
-rect1 = pygame.Rect(400,300,205,80)
+
 rect2 = pygame.Rect(400,300,205,80)
 rect3 = pygame.Rect(300,300,205,80)
 #buttons text rect and color.
-button1 = [
-    [text1, rect1, BLACK]]
+
 button2 = [
     [text2, rect2, BLACK]]
 button3 = [
     [text3, rect3, BLACK]]
+
+def draw_text(text, font, color, x, y):
+    img = font.render(text, True, color)
+    screen.blit(img,(x, y))
+
 
 class Player():
     def __init__(self, x, y):
@@ -64,10 +100,12 @@ class Player():
         self.height = self.image.get_height()
         self.vel_y = 0
         self.jumped = False
-
+    
+    
     def update(self, game_over):
      dx = 0
      dy = 0
+    
      if game_over == 0:
             #get keypresses
             key = pygame.key.get_pressed()
@@ -183,6 +221,9 @@ class World():
                     win = Win(col_count * tile_size, row_count * tile_size)
                     win_group.add(win)
 
+                if tile == 7:
+                    coin = Coin(col_count * tile_size, row_count * tile_size)
+                    coin_group.add(coin)
                     
                 col_count += 1
             row_count += 1
@@ -230,11 +271,20 @@ class Win(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+class Coin(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        img = pygame.image.load('images/coin.png')
+        self.image = pygame.transform.scale(img, (tile_size, tile_size))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
     
 world_data = [
 [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-[3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+[3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 6, 3],
 [3, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
@@ -260,7 +310,12 @@ player = Player(100,screen_height-245)
 enemy_group = pygame.sprite.Group()
 lava_group = pygame.sprite.Group()
 win_group = pygame.sprite.Group()
+coin_group = pygame.sprite.Group()
 world = World(world_data)
+level1_button = Button(300, 100, level1, 1)
+level2_button = Button(300, 350, level2, 1)
+level3_button = Button(300, 600, level3, 1)
+
 
 
 
@@ -276,42 +331,56 @@ mousedown = False
 
 while run:
     while menu:
+        
+        start_time = time.time()
         screen.fill((20, 50, 70))
-        for text, rect, color in button1:
-            pygame.draw.rect(screen, color, rect)
-            screen.blit(text, rect)
-        player = Player(100,screen_height-245)
         game_over = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 menu = False
                 run = False
             
-            if event.type == pygame.MOUSEMOTION:
-                for button in button1:
-
-                    if button[1].collidepoint(event.pos):
-                       button[2] = HOVER_COLOR 
-                    else:
-                        button[2] = BLACK
-            if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
-                    menu = False
-                    game = True
+            
+        if level1_button.draw():
+            game = True
+            menu = False
+            
+        if level2_button.draw():
+            menu = False
+            game2 = True 
+        if level3_button.draw():
+            menu = False
+            game3 = True
+        draw_text("Coins: " + str(coins), FONT, WHITE, tile_size - 10, 30)    
         pygame.display.update()
         clock.tick(fps)
         
 
 
     while game:
+        
+        end_time = time.time()
+        TimeScore = end_time - start_time
+        TimeScore = '{:.3f}'.format(TimeScore)
+        
+        text4 = FONT.render(TimeScore, True, WHITE)
+        textRect = text4.get_rect()
+        textRect.center = (600, 30)
         clock.tick(fps)
         screen.blit(bg, (0, 0))
         world.draw()
         lava_group.draw(screen)
         if game_over == 0:
             enemy_group.update()
+            #check for collision with coin
+            if pygame.sprite.spritecollide(player, coin_group, True):
+                coins += 1
+            draw_text("Coins: " + str(coins), FONT, WHITE, tile_size - 10, 30)    
         enemy_group.draw(screen)
         win_group.draw(screen)
+        coin_group.draw(screen)
         game_over = player.update(game_over)
+        
         if game_over < 0:
             player.image = player.dead_img
             game = False
@@ -319,15 +388,18 @@ while run:
         elif game_over > 0:
             game = False
             win = True
+            coins_collected = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 game = False
+        screen.blit(text4, textRect)
         pygame.display.update()
         clock.tick(fps)
 
     
     while win:
+    
         screen.fill((20, 50, 70))
         for text, rect, color in button2:
             pygame.draw.rect(screen, color, rect)
@@ -346,12 +418,15 @@ while run:
             if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
                     win = False
                     menu = True
-
+        draw_text("Coins: " + str(coins), FONT, WHITE, tile_size - 10, 30)    
+        screen.blit(text4, textRect)
         pygame.display.update()
         clock.tick(fps)
 
 
     while lose:
+        
+        start_time = time.time()
         screen.fill((20, 50, 70))
         for text, rect, color in button3:
             pygame.draw.rect(screen, color, rect)
@@ -372,9 +447,10 @@ while run:
             if event.type == pygame.MOUSEBUTTONUP and event.button == LMC and button[1].collidepoint(event.pos):
                     lose = False
                     game = True
+        
         pygame.display.update()
         clock.tick(fps)
-    
+        
     pygame.display.update()
     clock.tick(fps)   
 
